@@ -1,9 +1,15 @@
 #!/bin/sh
-# save provided arguments
-cat > /etc/periodic/daily/0-curator <<EOF
+
+PERIOD=1m
+KEEP_DAYS=1
+INDEX_PREFIX=logstash
+cat > /etc/periodic/${PERIOD}/0-curator <<EOF
 #!/bin/sh
-/usr/bin/curator_cli $@
+/usr/bin/curator_cli $@ \
+    delete_indices \
+    --ignore_empty_list \
+    --filter_list '[{"filtertype":"age","source":"name","direction":"older","unit":"days","unit_count":${KEEP_DAYS},"timestring": "%Y.%m.%d"},{"filtertype":"pattern","kind":"prefix","value":"${INDEX_PREFIX}"}]'
 EOF
-chmod +x /etc/periodic/daily/0-curator
-echo "JOB: curator_cli $@"
+chmod +x /etc/periodic/${PERIOD}/0-curator
+echo $(cat /etc/periodic/${PERIOD}/0-curator)
 exec crond -f

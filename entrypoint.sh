@@ -1,6 +1,6 @@
 #!/bin/sh
 
-PERIOD=1m
+PERIOD=daily
 KEEP_DAYS=1
 INDEX_PREFIX=logstash
 mkdir -p /etc/periodic/${PERIOD}

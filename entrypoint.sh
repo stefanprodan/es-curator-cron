@@ -12,5 +12,6 @@ cat > /etc/periodic/${PERIOD}/0-curator <<EOF
     --filter_list '[{"filtertype":"age","source":"name","direction":"older","unit":"days","unit_count":${KEEP_DAYS},"timestring": "%Y.%m.%d"},{"filtertype":"pattern","kind":"prefix","value":"${INDEX_PREFIX}"}]'
 EOF
 chmod +x /etc/periodic/${PERIOD}/0-curator
-echo $(cat /etc/periodic/${PERIOD}/0-curator)
+echo "cron: /etc/periodic/${PERIOD}/0-curator"
+echo "command: $(cat /etc/periodic/${PERIOD}/0-curator)"
 exec crond -f
